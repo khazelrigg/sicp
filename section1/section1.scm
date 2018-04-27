@@ -215,3 +215,62 @@
 (print "Pascal 4, 3 = " (pascal 4 3))
 (print "Pascal 5, 3 = " (pascal 5 3))
 (print "Pascal 6, 3 = " (pascal 6 3))
+
+(define (area shape r) (* shape r r))
+
+(define circle 3.14159)
+
+(print "Area of circle with radius 2 = " (area circle 2))
+
+; Takes a function 'FN' as a parameter
+(define (sum FN a b)
+  (if (> a b)
+    0
+    (+ (FN a) (sum FN (+ a 1) b))))
+
+(print "Sum of squares from 3 to 5 = " (sum square 3 5)) ;square is a function
+
+;Exponentiation
+
+;linear recursive
+(define (expt b n)
+  (if (= n 0)
+    1
+    (* b (expt b (- n 1)))))
+
+(print "3^3 = " (expt 3 3))
+
+;linear iteration of expt
+(define (expt-iter b counter product)
+  (if (= counter 0)
+    product
+    (expt-iter b
+               (- counter 1)
+               (* b product))))
+
+(define (expt b n)
+  (expt-iter b n 1))
+
+(print "30^30 = " (expt 30 30))
+
+;fast expt
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b ( / n 2))))
+        (else (* b (fast-expt b (- n 1))))))
+
+(define (even? n)
+  (= (remainder n 2) 0))
+
+(print "90^20 = " (fast-expt 90 20))
+
+; Exercise 1.16
+(define (expt-iterative b n a)
+  (cond ((= n 0) a) ;answer given by a
+        ((even? n) (expt-iterative (square b) (/ n 2) a))
+        (else (expt-iterative b (- n 1) (* a b)))))
+
+(define (expt b n)
+  (expt-iterative b n 1))
+
+(expt 90 900)
