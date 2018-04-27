@@ -274,3 +274,20 @@
   (expt-iterative b n 1))
 
 (expt 90 900)
+
+(define (double a)
+  (+ a a))
+
+(define (halve a)
+  (/ a 2))
+
+;rules
+;even = a * b = 2 * (a * b/2)
+;odd = a * b = a + a * (b - 1)
+
+(define (mult a b)
+  (cond ((= b 0) 0)
+        ((= b 1) a)
+        ((even? b) (double (mult a (halve b))))
+        (else (+ a (mult a (- b 1))))))
+
