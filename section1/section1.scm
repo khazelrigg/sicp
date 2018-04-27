@@ -1,5 +1,8 @@
 (declare (usual-integrations))
 
+(define (print s a)
+  (newline)(display s)(display a))
+
 (define (square x) (* x x))
 
 (square 21)
@@ -22,14 +25,15 @@
 (abs 2)
 (abs -9)
 
+;; Exercise 1.3
 (define (big-square a b c)
   (cond ((and (> a b) (> b c)) (sum-of-squares a b))
         ((and (< a b) (< a c)) (sum-of-squares b c))
         ((and (< b a) (> c b)) (sum-of-squares a c))))
 
-(newline) (display "Big square of 2, 3, 4 = ") (display (big-square 2 3 4))l
-(newline) (display "Big square of 4, 1, 6 = ") (display (big-square 4 1 6))
-(newline) (display "Big square of 5, 3, 0 = ") (display (big-square 5 3 0))
+(print "Big Square 2,3,4 = " (big-square 2 3 4))
+(print "Big Square 4,1,6 = " (big-square 4 1 6))
+(print "Big Square 5,3,0 = " (big-square 5 3 0))
 
 (define (sqrt-iter guess previous x)
   (if (good-enough? guess previous)
@@ -42,7 +46,7 @@
 
 (define (average x y)
   (/ (+ x y) 2))
-
+;; Exercise 1.7
 (define (good-enough? guess previous)
   (< (abs (-  guess previous)) 0.001))
 
@@ -58,6 +62,7 @@
 (define (good-cube? guess previous)
   (< (abs (- guess previous)) 0.001))
 
+;; Exercise 1.8
 (define (improve-cube guess x)
   (/ (+ (/ x
            (square guess))
@@ -67,9 +72,9 @@
 (define (cbrt x)
   (cube-iter 1.0 0 x))
 
-(newline) (display "Square root of 9 = ") (display (sqrt 9))
-(newline) (display "Square root of 16 = ") (display (sqrt 16))
-(newline) (display "Cube root of 8 = ") (display (cbrt 8))
+(print "Square root 9 = " (sqrt 9))
+(print "Square root 16 = " (sqrt 16))
+(print "Cube root of 8 = " (cbrt 8))
 
 (define (sqrt x)
   (define (good-enough? guess)
@@ -82,14 +87,14 @@
       (sqrt-iter (improve guess))))
   (sqrt-iter 1.0))
 
-(newline) (display "Square root of 25 = ") (display (sqrt 25))
+(print "Square root 25 = " (sqrt 25))
 
 (define (factorial n)
-  (if (= n 1) 
+  (if (= n 1)
     1
     (* n (factorial (- n 1)))))
 
-(newline) (display "4! = ") (display (factorial 4))
+(print "4! = " (factorial 4))
 
 (define (factorial n)
   (fact-iter 1 1 n))
@@ -100,6 +105,7 @@
 
 (factorial 5)
 
+;; Exercise 1.10
 (define (A x y)
   (cond ((= y 0) 0)
         ((= x 0) (* 2 y))
@@ -121,14 +127,16 @@
 (define (k n)
   (* 5 n n))
 
+; Recursive Fibonacci
 (define (fib n)
   (cond ((= n 0) 0)
         ((= n 1) 1)
         (else (+ (fib (- n 1))
                  (fib (- n 2))))))
 
-(display (fib 20)) (newline)
+(print "Fibonacci 10 = " (fib 10))
 
+; Iterative Fibonacci
 (define (fib n)
   (fib-iter 1 0 n))
 (define (fib-iter a b count)
@@ -136,7 +144,9 @@
     b
     (fib-iter (+ a b) a (- count 1))))
 
-(fib 1000)
+(print "Fibonacci 100 = " (fib 100))
+
+;; Counting Change
 
 (define (count-change amount)
   (cc amount 5))
@@ -157,6 +167,51 @@
         ((= kinds-of-coins 4) 25)
         ((= kinds-of-coins 5) 50)))
 
-(count-change 100)
+(print "Count change 100 = " (count-change 100))
+
+;; Exercise 1.11
+
+(define (f n)
+  (cond ((< n 3) n)
+        ((not (< n 3))
+         (+
+           (+
+             (f (- n 1))
+              (* 2 (f (- n 2))))
+           (* 3 (f (- n 3)))))
+        ))
+
+(print "F(2) = " (f 2))
+(print "F(3) = " (f 3))
+(print "F(4) = " (f 4))
+(print "F(5) = " (f 5))
+
+(define (f-iter n count)
+  (if (< n 3)
+    n
+    (+
+      (+
+        (f-iter (- count 1))
+        (* 2 (f-iter (- count 2))))
+      (* 3 (f-iter (- count 3))))))
+
+(print "F(2) = " (f 2))
+(print "F(3) = " (f 3))
+(print "F(4) = " (f 4))
+(print "F(5) = " (f 5))
+
+;; Exercise 1.12
+
+(define (pascal r c)
+  (if (or (< r 3) (= c r) (= c 1)) 1
+   (+ (pascal (- r 1) (- c 1))
+      (pascal (- r 1) c))
+   ))
 
 
+(print "Pascal 1, 1 = " (pascal 1 1))
+(print "Pascal 2, 2 = " (pascal 2 2))
+(print "Pascal 3, 2 = " (pascal 3 2))
+(print "Pascal 4, 3 = " (pascal 4 3))
+(print "Pascal 5, 3 = " (pascal 5 3))
+(print "Pascal 6, 3 = " (pascal 6 3))
