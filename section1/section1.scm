@@ -281,7 +281,7 @@
 (define (halve a)
   (/ a 2))
 
-;rules
+;Exercise 1.17
 ;even = a * b = 2 * (a * b/2)
 ;odd = a * b = a + a * (b - 1)
 
@@ -290,4 +290,63 @@
         ((= b 1) a)
         ((even? b) (double (mult a (halve b))))
         (else (+ a (mult a (- b 1))))))
+
+(print "900 * 343 = " (mult 900 343))
+
+
+(define (smallest-divisor n) (find-divisor n 2))
+
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+	((divides? test-divisor n) test-divisor)
+	(else (find-divisor n (+ test-divisor 1)))))
+
+(define (divides? a b) (= remainder b a) 0)
+(define (prime? n)
+  (= n (smallest-divisor n)))
+
+(smallest-divisor "Smallest-divisor of 199 = " (smallest-divisor 199))
+(smallest-divisor "Smallest-divisor of 1999 = " (smallest-divisor 1999))
+(smallest-divisor "Smallest-divisor of 19999 = " (smallest-divisor 19999))
+
+
+; Fermat-test
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+	((even? exp)
+	 (remainder
+	   (square (expmod base (/ exp 2) m))
+	   m))
+	(else
+	  (remainder
+	    (* base (expmod base (- exp 1) m))
+	    m))))
+
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+	((fermat-test n) (fast-prime? n (- times 1)))
+	(else false)))
+
+(print "7 is a prime? " (fast-prime? 7 4))
+
+
+; Exercise 1.22
+(define (timed-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (runtime)))
+
+(define (start-prime-test n start-time)
+  (if (prime? n)
+    (report-prime (- (runtime) start-time))))
+
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
 
